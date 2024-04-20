@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Main from './Components/Main';
 
-export default function App() {
+export default function MyRequest() {
   return (
-    <Main />
+    <View style={styles.container}>
+      <Text>My Request is openned</Text>
+      <StatusBar style="auto" />
+    </View>
   );
 }
 

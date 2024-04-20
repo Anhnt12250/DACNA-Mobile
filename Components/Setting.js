@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Main from './Components/Main';
 
-export default function App() {
+export default function Setting() {
   return (
-    <Main />
+    <View style={styles.container}>
+      <Text>Setting is oppened</Text>
+      <StatusBar style="auto" />
+    </View>
   );
 }
 
