@@ -5,8 +5,8 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerI
 import { View, Text} from 'react-native';
 import { IconButton } from 'react-native-paper';
 
-import  Home  from './Home';
-import  MyRequest  from './MyRequest';
+import  Home  from './HomeComponents/Home';
+import  MyRequest  from './MyRequestComponents/MyRequest';
 import  TakeABreak  from './TakeABreak';
 import  Setting  from './Setting';
 
