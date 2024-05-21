@@ -1,42 +1,39 @@
-import { useState } from "react";
-
 import { StyleSheet } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { useForm } from "react-hook-form";
+import { TextInput, Button, Text } from "react-native-paper";
 
-export default function LoginForm(props: any) {
-  const { submitForm } = props;
+import { LoginFormModel } from "../models/login-form.model";
 
-  const [email, setEmail] = useState("");
+import EmailInput from "@components/EmailInput";
+import PasswordInput from "@components/PasswordInput";
 
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+export default function Form(props: any) {
+  const { control, handleSubmit } = useForm<LoginFormModel>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
+  const { onLogin, onChangeToRegister } = props;
+
+  const onSubmit = (data: LoginFormModel) => {
+    onLogin(data);
   };
 
   return (
     <>
-      <TextInput
-        label="Email"
-        value={email}
-        mode="outlined"
-        inputMode="email"
-        style={styles.input}
-        onChangeText={(email) => setEmail(email)}
-      />
-      <TextInput
-        label="Password"
-        value={password}
-        mode="outlined"
-        secureTextEntry={!showPassword}
-        onChangeText={(password) => setPassword(password)}
-        style={styles.input}
-        right={<TextInput.Icon icon="eye" onPress={toggleShowPassword} />}
-      />
-      <Button mode="contained" onPress={() => submitForm(email, password)} style={styles.button}>
+      <EmailInput control={control} name="email" label="Email" />
+      <PasswordInput control={control} name="password" label="Password" />
+      <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
         Login
       </Button>
+      <Text style={styles.register}>
+        Don't have an account?{" "}
+        <Text style={styles.registerAction} onPress={onChangeToRegister}>
+          Register
+        </Text>
+      </Text>
     </>
   );
 }
@@ -47,5 +44,12 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
+  },
+  register: {
+    marginTop: 10,
+    textAlign: "center",
+  },
+  registerAction: {
+    color: "blue", //remember to change primary color
   },
 });

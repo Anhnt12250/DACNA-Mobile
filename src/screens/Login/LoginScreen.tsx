@@ -1,12 +1,20 @@
 import { View, StyleSheet, Image } from "react-native";
 import { Text } from "react-native-paper";
 
-import LoginFormComponent from "./components/LoginFormComponent";
-import PlatformComponent from "./components/PlatformComponent";
+import { LoginFormModel } from "./models/login-form.model";
 
-export default function LoginScreen() {
-  const handleOnLogin = (email: string, password: string) => {
-    console.log(email, password);
+import FormComponent from "@screens/Login/components/LoginFormComponent";
+import PlatformComponent from "@screens/Login/components/PlatformComponent";
+
+export default function LoginScreen(props: any) {
+  const { navigation } = props;
+
+  const handleOnLogin = (form: LoginFormModel) => {
+    console.log(form);
+  };
+
+  const handleChangeToRegister = () => {
+    navigation.navigate("Register");
   };
 
   const handleOnGoogleLogin = () => {
@@ -26,10 +34,10 @@ export default function LoginScreen() {
       <View>
         <Image style={styles.logo} source={require("@assets/logo.png")} />
         <Text style={styles.title} variant="titleLarge">
-          Chấm Công Online
+          Login
         </Text>
       </View>
-      <LoginFormComponent submitForm={handleOnLogin} />
+      <FormComponent onLogin={handleOnLogin} onChangeToRegister={handleChangeToRegister} />
       <PlatformComponent
         onGoogleLogin={handleOnGoogleLogin}
         onFacebookLogin={handleOnFacebookLogin}

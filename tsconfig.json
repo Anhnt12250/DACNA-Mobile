@@ -4,9 +4,11 @@
     "baseUrl": "./",
     "paths": {
       "@screens/*": ["./src/screens/*"],
-      "@assets/*": ["./src/assets/*"]
+      "@assets/*": ["./src/assets/*"],
+      "@models/*": ["./src/models/*"],
+      "@components/*": ["./src/components/*"]
     },
     "strict": true
   },
-  "include": ["./src/**/*", "custom.d.ts"]
+  "include": ["./src/**/*", "./**/*", "custom.d.ts"]
 }

@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import React from "react";
 
 // Navigations
 import { NavigationContainer } from "@react-navigation/native";
@@ -18,7 +18,7 @@ const BOTTOM_TABS = [
   { name: "Settings", icon: "cog", component: SettingScreen },
 ];
 
-export default function MainContainer() {
+export default function MainNavigation() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
