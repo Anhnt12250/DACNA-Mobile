@@ -1,20 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// Component Imports
+import { PaperProvider } from "react-native-paper";
+
+import LoginScreen from "@screens/Login/LoginScreen";
+
+import MainContainer from "./nagivation/MainContainer";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const isLogged = false;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  return <PaperProvider>{isLogged ? <MainContainer /> : <LoginScreen />}</PaperProvider>;
+}
