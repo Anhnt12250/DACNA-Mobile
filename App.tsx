@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import { Provider, useSelector, useDispatch } from "react-redux";
+import { MD3DarkTheme, MD3LightTheme, adaptNavigationTheme } from "react-native-paper";
+import merge from "deepmerge";
 
 // App Navigation
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
@@ -23,9 +29,19 @@ import AuthenticationNavigation from "./src/nagivation/AuthenticationNavigation"
 // Components
 import Loading from "./src/components/Loading";
 
+// Themes
+const { LightTheme, DarkTheme } = adaptNavigationTheme({
+  reactNavigationLight: NavigationDefaultTheme,
+  reactNavigationDark: NavigationDarkTheme,
+});
+
+const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
+const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
+
+const theme = CombinedDefaultTheme;
+
 function Wrapper() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isAuth);
-  const isLoading = useSelector((state: RootState) => state.auth.loading);
 
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -41,7 +57,7 @@ function Wrapper() {
   };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isInitialized ? (
           isLoggedIn ? (
@@ -60,7 +76,7 @@ function Wrapper() {
 export default function App() {
   return (
     <Provider store={store}>
-      <PaperProvider>
+      <PaperProvider theme={theme}>
         <Wrapper />
       </PaperProvider>
     </Provider>

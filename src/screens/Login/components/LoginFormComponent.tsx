@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   registerAction: {
-    color: "blue", //remember to change primary color
+    color: MD3Colors.primary80,
   },
 });
