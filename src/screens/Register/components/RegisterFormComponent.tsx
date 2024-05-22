@@ -1,7 +1,10 @@
 import { useForm } from "react-hook-form";
 
 import { StyleSheet, View } from "react-native";
-import { Button, MD3Colors, Text } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
+
+//colors
+import themes from "@themes/themes";
 
 import { RegisterFormModel } from "../models/register-form.model";
 
@@ -67,6 +70,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   loginAction: {
-    color: MD3Colors.primary80,
+    color: themes.Custom.colors.primary,
   },
 });

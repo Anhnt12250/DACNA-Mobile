@@ -8,7 +8,8 @@
       "@models/*": ["./src/models/*"],
       "@components/*": ["./src/components/*"],
       "@services/*": ["./src/services/*"],
-      "@redux/*": ["./src/redux/*"]
+      "@redux/*": ["./src/redux/*"],
+      "@themes/*": ["./src/themes/*"]
     },
     "strict": true
   },

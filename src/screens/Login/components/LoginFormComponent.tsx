@@ -1,7 +1,9 @@
 import { StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
-import { Button, Text, ActivityIndicator, MD3Colors } from "react-native-paper";
+import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useSelector } from "react-redux";
+
+import themes from "@themes/themes";
 
 //redux
 import { RootState } from "@redux/store";
@@ -34,7 +36,11 @@ export default function Form(props: any) {
       <EmailInput control={control} name="email" label="Email" />
       <PasswordInput control={control} name="password" label="Password" />
       <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
-        {isLogging ? <ActivityIndicator animating={true} color={MD3Colors.primary50} /> : "Login"}
+        {isLogging ? (
+          <ActivityIndicator animating={true} color={themes.Custom.colors.onPrimary} />
+        ) : (
+          "Login"
+        )}
       </Button>
       <Text style={styles.register}>
         Don't have an account?{" "}
@@ -58,6 +64,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   registerAction: {
-    color: MD3Colors.primary80,
+    color: themes.Custom.colors.primary,
   },
 });

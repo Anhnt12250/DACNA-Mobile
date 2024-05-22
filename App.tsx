@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { Provider, useSelector, useDispatch } from "react-redux";
-import { MD3DarkTheme, MD3LightTheme, adaptNavigationTheme } from "react-native-paper";
-import merge from "deepmerge";
+
+// Themes
+import themes from "src/themes/themes";
 
 // App Navigation
-import {
-  NavigationContainer,
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
@@ -29,17 +26,6 @@ import AuthenticationNavigation from "./src/nagivation/AuthenticationNavigation"
 // Components
 import Loading from "./src/components/Loading";
 
-// Themes
-const { LightTheme, DarkTheme } = adaptNavigationTheme({
-  reactNavigationLight: NavigationDefaultTheme,
-  reactNavigationDark: NavigationDarkTheme,
-});
-
-const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
-const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
-
-const theme = CombinedDefaultTheme;
-
 function Wrapper() {
   const isLoggedIn = useSelector((state: RootState) => state.auth.isAuth);
 
@@ -57,27 +43,27 @@ function Wrapper() {
   };
 
   return (
-    <NavigationContainer theme={theme}>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {isInitialized ? (
-          isLoggedIn ? (
-            <Stack.Screen name="MainNavigation" component={MainNavigation} />
-          ) : (
-            <Stack.Screen name="AuthenticationNavigation" component={AuthenticationNavigation} />
-          )
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {isInitialized ? (
+        isLoggedIn ? (
+          <Stack.Screen name="MainNavigation" component={MainNavigation} />
         ) : (
-          <Stack.Screen name="Loading" component={Loading} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen name="AuthenticationNavigation" component={AuthenticationNavigation} />
+        )
+      ) : (
+        <Stack.Screen name="Loading" component={Loading} />
+      )}
+    </Stack.Navigator>
   );
 }
 
 export default function App() {
   return (
     <Provider store={store}>
-      <PaperProvider theme={theme}>
-        <Wrapper />
+      <PaperProvider theme={themes.Custom}>
+        <NavigationContainer theme={themes.Combined}>
+          <Wrapper />
+        </NavigationContainer>
       </PaperProvider>
     </Provider>
   );
