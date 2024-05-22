@@ -1,7 +1,6 @@
 import React from "react";
 
 // Navigations
-import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 
 // Screens
@@ -20,17 +19,15 @@ const BOTTOM_TABS = [
 
 export default function MainNavigation() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        {BOTTOM_TABS.map((tab, index) => (
-          <Tab.Screen
-            key={index}
-            name={tab.name}
-            component={tab.component}
-            options={{ tabBarIcon: tab.icon }}
-          />
-        ))}
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Tab.Navigator>
+      {BOTTOM_TABS.map((tab, index) => (
+        <Tab.Screen
+          key={index}
+          name={tab.name}
+          component={tab.component}
+          options={{ tabBarIcon: tab.icon }}
+        />
+      ))}
+    </Tab.Navigator>
   );
 }

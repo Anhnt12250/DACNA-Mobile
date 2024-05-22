@@ -2,6 +2,11 @@ import { StyleSheet } from "react-native";
 import { MD3Colors } from "react-native-paper";
 
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: "center",
+  },
   inputContainer: {
     marginBottom: 5,
   },

@@ -1,16 +1,28 @@
+import { useDispatch } from "react-redux";
 import { View, StyleSheet, Image } from "react-native";
 import { Text } from "react-native-paper";
 
+//redux
+import { AppDispatch } from "@redux/store";
+import { UserActions } from "@redux/user/UserSlice";
+import { AuthActions } from "@redux/auth/AuthSlice";
+
+//models
 import { LoginFormModel } from "./models/login-form.model";
 
+//components
 import FormComponent from "@screens/Login/components/LoginFormComponent";
 import PlatformComponent from "@screens/Login/components/PlatformComponent";
 
 export default function LoginScreen(props: any) {
   const { navigation } = props;
 
-  const handleOnLogin = (form: LoginFormModel) => {
-    console.log(form);
+  // store
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleOnLogin = async (form: LoginFormModel) => {
+    await dispatch(UserActions.loginUserAsync(form));
+    await dispatch(AuthActions.checkUserSessionAsync());
   };
 
   const handleChangeToRegister = () => {

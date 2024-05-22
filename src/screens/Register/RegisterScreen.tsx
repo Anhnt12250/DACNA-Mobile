@@ -13,7 +13,7 @@ export default function RegisterScreen(props: any) {
   };
 
   const handleChangeToLogin = () => {
-    props.navigation.navigate("Login");
+    navigation.navigate("Login");
   };
 
   return (

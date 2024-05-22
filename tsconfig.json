@@ -6,7 +6,9 @@
       "@screens/*": ["./src/screens/*"],
       "@assets/*": ["./src/assets/*"],
       "@models/*": ["./src/models/*"],
-      "@components/*": ["./src/components/*"]
+      "@components/*": ["./src/components/*"],
+      "@services/*": ["./src/services/*"],
+      "@redux/*": ["./src/redux/*"]
     },
     "strict": true
   },

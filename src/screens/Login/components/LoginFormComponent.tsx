@@ -1,9 +1,15 @@
 import { StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
-import { TextInput, Button, Text } from "react-native-paper";
+import { Button, Text, ActivityIndicator, MD3Colors } from "react-native-paper";
+import { useSelector } from "react-redux";
 
+//redux
+import { RootState } from "@redux/store";
+
+//models
 import { LoginFormModel } from "../models/login-form.model";
 
+//components
 import EmailInput from "@components/EmailInput";
 import PasswordInput from "@components/PasswordInput";
 
@@ -14,6 +20,8 @@ export default function Form(props: any) {
       password: "",
     },
   });
+
+  const isLogging = useSelector((state: RootState) => state.user.loading);
 
   const { onLogin, onChangeToRegister } = props;
 
@@ -26,7 +34,7 @@ export default function Form(props: any) {
       <EmailInput control={control} name="email" label="Email" />
       <PasswordInput control={control} name="password" label="Password" />
       <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
-        Login
+        {isLogging ? <ActivityIndicator animating={true} color={MD3Colors.primary50} /> : "Login"}
       </Button>
       <Text style={styles.register}>
         Don't have an account?{" "}
