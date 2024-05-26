@@ -4,8 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 
 //colors
-import themes from "@themes/themes";
-
+import { currentTheme } from "@themes/themes";
 import { RegisterFormModel } from "../models/register-form.model";
 
 //components
@@ -70,6 +69,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   loginAction: {
-    color: themes.Custom.colors.primary,
+    color: currentTheme.colors.primary,
   },
 });

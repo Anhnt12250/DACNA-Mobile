@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { Appearance } from "react-native";
 import { Provider, useSelector, useDispatch } from "react-redux";
 
 // Themes
-import themes from "src/themes/themes";
+import { PreferencesContext, ThemeMode } from "@themes/ThemeContext";
 
 // App Navigation
 import { NavigationContainer } from "@react-navigation/native";
@@ -57,14 +58,49 @@ function Wrapper() {
   );
 }
 
+import themes, { changeTheme } from "@themes/themes";
+
 export default function App() {
+  const [currentTheme, setCurrentTheme] = useState<ThemeMode>("system");
+  const sysScheme = Appearance.getColorScheme();
+
+  let themeCustom = sysScheme === "dark" ? themes.dark.Custom : themes.light.Custom;
+  let themeCombined = sysScheme === "dark" ? themes.dark.Combined : themes.light.Combined;
+
+  useEffect(() => {
+    if (currentTheme === "system") {
+      themeCustom = sysScheme === "dark" ? themes.dark.Custom : themes.light.Custom;
+      themeCombined = sysScheme === "dark" ? themes.dark.Combined : themes.light.Combined;
+    } else {
+      themeCustom = currentTheme === "dark" ? themes.dark.Custom : themes.light.Custom;
+      themeCombined = currentTheme === "dark" ? themes.dark.Combined : themes.light.Combined;
+    }
+  }, [currentTheme]);
+
+  const changeTheme = useCallback(
+    (mode: ThemeMode) => {
+      return setCurrentTheme(mode);
+    },
+    [currentTheme]
+  );
+
+  const preferences = useMemo(
+    () => ({
+      changeTheme,
+      currentTheme,
+    }),
+    [changeTheme, currentTheme]
+  );
+
   return (
     <Provider store={store}>
-      <PaperProvider theme={themes.Custom}>
-        <NavigationContainer theme={themes.Combined}>
-          <Wrapper />
-        </NavigationContainer>
-      </PaperProvider>
+      <PreferencesContext.Provider value={preferences}>
+        <PaperProvider theme={themeCustom}>
+          <NavigationContainer theme={themeCombined}>
+            <Wrapper />
+          </NavigationContainer>
+        </PaperProvider>
+      </PreferencesContext.Provider>
     </Provider>
   );
 }

@@ -32,17 +32,20 @@ const CustomDark = {
 const CombinedDefaultTheme = merge(CustomLight, LightTheme);
 const CombinedDarkTheme = merge(CustomDark, DarkTheme);
 
-const mode = "dark";
+const themes = {
+  dark: {
+    Combined: CombinedDarkTheme,
+    Custom: CustomDark,
+  },
+  light: {
+    Combined: CombinedDefaultTheme,
+    Custom: CustomLight,
+  },
+};
 
-const themes =
-  mode === "dark"
-    ? {
-        Combined: CombinedDarkTheme,
-        Custom: CustomDark,
-      }
-    : {
-        Combined: CombinedDefaultTheme,
-        Custom: CustomLight,
-      };
+export let currentTheme = themes.light.Custom;
+export const changeTheme = (mode: "light" | "dark") => {
+  if (mode) currentTheme = themes[mode].Custom;
+};
 
 export default themes;

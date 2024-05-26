@@ -1,7 +1,16 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import { MD3Colors } from "react-native-paper";
 
 export default StyleSheet.create({
+  screen: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight ? StatusBar.currentHeight + 10 : 10,
+  },
+  screenTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
   container: {
     flex: 1,
     padding: 20,

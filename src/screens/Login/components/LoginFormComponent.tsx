@@ -15,6 +15,9 @@ import { LoginFormModel } from "../models/login-form.model";
 import EmailInput from "@components/EmailInput";
 import PasswordInput from "@components/PasswordInput";
 
+// theme
+import { currentTheme } from "@themes/themes";
+
 export default function Form(props: any) {
   const { control, handleSubmit } = useForm<LoginFormModel>({
     defaultValues: {
@@ -37,7 +40,7 @@ export default function Form(props: any) {
       <PasswordInput control={control} name="password" label="Password" />
       <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
         {isLogging ? (
-          <ActivityIndicator animating={true} color={themes.Custom.colors.onPrimary} />
+          <ActivityIndicator animating={true} color={currentTheme.colors.onPrimary} />
         ) : (
           "Login"
         )}
@@ -64,6 +67,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   registerAction: {
-    color: themes.Custom.colors.primary,
+    color: currentTheme.colors.primary,
   },
 });
