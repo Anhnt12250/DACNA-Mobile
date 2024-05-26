@@ -44,7 +44,7 @@ const themes = {
 };
 
 export let currentTheme = themes.light.Custom;
-export const changeTheme = (mode: "light" | "dark") => {
+export const changeGlobalTheme = (mode: "light" | "dark") => {
   if (mode) currentTheme = themes[mode].Custom;
 };
 

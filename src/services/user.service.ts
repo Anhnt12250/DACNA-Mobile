@@ -20,7 +20,7 @@ const LoginUser = async (form: LoginFormModel) => {
     password: form.password,
   };
 
-  return await fetch(`${apiURL}/user/login`, {
+  const result = await fetch(`${apiURL}/user/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -28,6 +28,8 @@ const LoginUser = async (form: LoginFormModel) => {
     body: JSON.stringify(body),
     credentials: "include",
   }).then(mapToServerResponse<User>);
+
+  return result;
 };
 
 const LogoutUser = async () => {

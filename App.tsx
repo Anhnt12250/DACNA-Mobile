@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { Appearance } from "react-native";
+import { useColorScheme } from "react-native";
 import { Provider, useSelector, useDispatch } from "react-redux";
 
 // Themes
@@ -21,6 +21,7 @@ import store, { AppDispatch, RootState } from "./src/redux/store";
 import { AuthActions } from "@redux/auth/AuthSlice";
 
 // Page Navigation
+import CheckInNavigation from "src/nagivation/CheckInNavigation";
 import MainNavigation from "./src/nagivation/MainNavigation";
 import AuthenticationNavigation from "./src/nagivation/AuthenticationNavigation";
 
@@ -47,7 +48,10 @@ function Wrapper() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isInitialized ? (
         isLoggedIn ? (
-          <Stack.Screen name="MainNavigation" component={MainNavigation} />
+          <>
+            <Stack.Screen name="MainNavigation" component={MainNavigation} />
+            <Stack.Screen name="CheckInNavigation" component={CheckInNavigation} />
+          </>
         ) : (
           <Stack.Screen name="AuthenticationNavigation" component={AuthenticationNavigation} />
         )
@@ -58,23 +62,31 @@ function Wrapper() {
   );
 }
 
-import themes, { changeTheme } from "@themes/themes";
+import themes, { changeGlobalTheme } from "@themes/themes";
 
 export default function App() {
   const [currentTheme, setCurrentTheme] = useState<ThemeMode>("system");
-  const sysScheme = Appearance.getColorScheme();
 
-  let themeCustom = sysScheme === "dark" ? themes.dark.Custom : themes.light.Custom;
-  let themeCombined = sysScheme === "dark" ? themes.dark.Combined : themes.light.Combined;
+  const [themeCustom, setThemeCustom] = useState(themes.light.Custom);
+  const [themeCombined, setThemeCombined] = useState(themes.light.Combined);
+
+  const sysScheme = useColorScheme();
 
   useEffect(() => {
-    if (currentTheme === "system") {
-      themeCustom = sysScheme === "dark" ? themes.dark.Custom : themes.light.Custom;
-      themeCombined = sysScheme === "dark" ? themes.dark.Combined : themes.light.Combined;
-    } else {
-      themeCustom = currentTheme === "dark" ? themes.dark.Custom : themes.light.Custom;
-      themeCombined = currentTheme === "dark" ? themes.dark.Combined : themes.light.Combined;
+    if (currentTheme !== "system") {
+      changeGlobalTheme(currentTheme);
+      setThemeCustom(themes[currentTheme].Custom);
+      setThemeCombined(themes[currentTheme].Combined);
+      return;
     }
+
+    // If sysScheme is null
+    // Meaning user has not set any preference
+    // So we will use the default theme for the app
+    // Which is light depending on our tatse :))
+    setThemeCustom(themes[sysScheme ?? "dark"].Custom);
+    setThemeCombined(themes[sysScheme ?? "dark"].Combined);
+    changeGlobalTheme(sysScheme ?? "dark");
   }, [currentTheme]);
 
   const changeTheme = useCallback(

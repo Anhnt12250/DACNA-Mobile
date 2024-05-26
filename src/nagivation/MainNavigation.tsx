@@ -1,4 +1,4 @@
-import React from "react";
+import { FAB, Portal } from "react-native-paper";
 
 // Navigations
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
@@ -17,17 +17,28 @@ const BOTTOM_TABS = [
   { name: "Settings", icon: "cog", component: SettingScreen },
 ];
 
-export default function MainNavigation() {
+export default function MainNavigation(props: any) {
+  const navigateToCheckIn = () => {
+    props.navigation.navigate("CheckInNavigation");
+  };
+
   return (
-    <Tab.Navigator>
-      {BOTTOM_TABS.map((tab, index) => (
-        <Tab.Screen
-          key={index}
-          name={tab.name}
-          component={tab.component}
-          options={{ tabBarIcon: tab.icon }}
-        />
-      ))}
-    </Tab.Navigator>
+    <Portal.Host>
+      <Tab.Navigator>
+        {BOTTOM_TABS.map((tab, index) => (
+          <Tab.Screen
+            key={index}
+            name={tab.name}
+            component={tab.component}
+            options={{ tabBarIcon: tab.icon }}
+          />
+        ))}
+      </Tab.Navigator>
+      <FAB
+        style={{ position: "absolute", margin: 16, right: 0, bottom: 90 }}
+        icon="qrcode-scan"
+        onPress={() => navigateToCheckIn()}
+      />
+    </Portal.Host>
   );
 }
