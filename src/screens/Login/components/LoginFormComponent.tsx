@@ -39,11 +39,7 @@ export default function Form(props: any) {
       <EmailInput control={control} name="email" label="Email" />
       <PasswordInput control={control} name="password" label="Password" />
       <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
-        {isLogging ? (
-          <ActivityIndicator animating={true} color={currentTheme.colors.onPrimary} />
-        ) : (
-          "Login"
-        )}
+        {isLogging ? <ActivityIndicator animating={true} /> : "Login"}
       </Button>
       <Text style={styles.register}>
         Don't have an account?{" "}

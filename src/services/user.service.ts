@@ -1,6 +1,6 @@
 import { config } from "src/config/config";
-
 import { mapToServerResponse } from "@models/HttpReponse";
+
 import { User } from "@models/User.model";
 import { LoginFormModel } from "@screens/Login/models/login-form.model";
 

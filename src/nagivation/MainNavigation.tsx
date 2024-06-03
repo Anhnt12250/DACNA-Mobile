@@ -19,7 +19,7 @@ const BOTTOM_TABS = [
 
 export default function MainNavigation(props: any) {
   const navigateToCheckIn = () => {
-    props.navigation.navigate("CheckInNavigation");
+    props.navigation.navigate("QuickResponseNavigation");
   };
 
   return (

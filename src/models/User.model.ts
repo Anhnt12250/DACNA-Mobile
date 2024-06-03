@@ -2,10 +2,10 @@ export type User = {
   id: string;
   email: string;
 
-  firstName: string;
-  lastName: string;
-  photoUrl: string;
+  first_name: string;
+  last_name: string;
+  photo_url: string;
 
-  googleID?: string;
-  githubID?: string;
+  google_id?: string;
+  github_id?: string;
 };

@@ -21,7 +21,7 @@ import store, { AppDispatch, RootState } from "./src/redux/store";
 import { AuthActions } from "@redux/auth/AuthSlice";
 
 // Page Navigation
-import CheckInNavigation from "src/nagivation/CheckInNavigation";
+import QuickResponseNavigation from "src/nagivation/QuickResponseNavigation";
 import MainNavigation from "./src/nagivation/MainNavigation";
 import AuthenticationNavigation from "./src/nagivation/AuthenticationNavigation";
 
@@ -50,7 +50,7 @@ function Wrapper() {
         isLoggedIn ? (
           <>
             <Stack.Screen name="MainNavigation" component={MainNavigation} />
-            <Stack.Screen name="CheckInNavigation" component={CheckInNavigation} />
+            <Stack.Screen name="QuickResponseNavigation" component={QuickResponseNavigation} />
           </>
         ) : (
           <Stack.Screen name="AuthenticationNavigation" component={AuthenticationNavigation} />

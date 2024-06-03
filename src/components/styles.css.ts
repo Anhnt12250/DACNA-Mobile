@@ -14,7 +14,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: "center",
+    alignContent: "center",
   },
   inputContainer: {
     marginBottom: 5,

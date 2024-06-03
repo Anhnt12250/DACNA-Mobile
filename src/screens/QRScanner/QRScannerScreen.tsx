@@ -1,45 +1,46 @@
-import { StyleSheet, View } from "react-native";
-import { Text } from "react-native-paper";
+import { useState, useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 
-import {
-  Camera,
-  useCameraDevice,
-  useCameraPermission,
-  useCodeScanner,
-} from "react-native-vision-camera";
+import { Camera, CameraType } from "react-native-camera-kit";
 
-import globalStyles from "@components/styles.css";
+export default function QRScannerScreen(props: any) {
+  const { navigation } = props;
 
-export default function QRScannerScreen() {
-  const device = useCameraDevice("back");
-  const { hasPermission } = useCameraPermission();
+  const [qr, setQr] = useState<string>("");
 
-  if (!hasPermission) {
-    return (
-      <View style={globalStyles.container}>
-        <Text>Camera permission is required to scan QR codes.</Text>
-      </View>
-    );
-  }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setQr("");
+    });
 
-  if (!device) {
-    return (
-      <View style={globalStyles.container}>
-        <Text>Camera not available.</Text>
-      </View>
-    );
-  }
+    return unsubscribe;
+  }, [navigation]);
 
-  const codeScanner = useCodeScanner({
-    codeTypes: ["qr", "ean-13"],
-    onCodeScanned: (codes) => {
-      console.log(`Scanned ${codes.length} codes!`);
-    },
-  });
+  const handleOnScanned = (qr: string) => {
+    // turn off the scanner
+    setQr(qr);
+    const [action, id] = qr.split(":");
+
+    if (action === "checkin") {
+      navigation.navigate("CheckIn", { id });
+    }
+  };
 
   return (
-    <View style={globalStyles.container}>
-      <Camera {...codeScanner} device={device} isActive={true} style={StyleSheet.absoluteFill} />
+    <View style={StyleSheet.absoluteFill}>
+      {!qr && (
+        <Camera
+          style={StyleSheet.absoluteFill}
+          cameraType={CameraType.Back}
+          scanBarcode={true}
+          onReadCode={(event: any) => {
+            handleOnScanned(event.nativeEvent.codeStringValue);
+          }}
+          showFrame={true}
+          laserColor="transparent"
+          frameColor="white"
+        />
+      )}
     </View>
   );
 }

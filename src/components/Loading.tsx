@@ -6,7 +6,7 @@ export default function Loading() {
   return (
     <View style={[globalStyles.container, { alignContent: "center" }]}>
       <Text style={{ textAlign: "center" }}>
-        <ActivityIndicator size="large" animating={true} color={MD3Colors.primary50} />;
+        <ActivityIndicator size="large" animating={true} color={MD3Colors.primary50} />
       </Text>
     </View>
   );
