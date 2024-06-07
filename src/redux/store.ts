@@ -7,14 +7,18 @@ import GroupReducer from "./group/GroupSlice";
 //Workday
 import WorkdayReducer from "./workday/WorkdaySlice";
 import CheckInReducer from "./workday/CheckInSlice";
+import CheckOutReducer from "./workday/CheckOutSlice";
 
 const store = configureStore({
   reducer: {
     user: UserReducer,
     auth: AuthReducer,
     group: GroupReducer,
+
+    //Workday
     workday: WorkdayReducer,
     checkin: CheckInReducer,
+    checkout: CheckOutReducer,
   },
 });
 

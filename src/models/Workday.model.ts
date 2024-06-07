@@ -6,11 +6,11 @@ export type Workday = {
 
   status: WorkdayStatus;
 
-  check_in: Date;
-  check_out: Date;
+  check_in: string;
+  check_out: string | null;
 
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 };
 
 export type WorkdayStatus = "CHECKED_IN" | "CHECKED_OUT";

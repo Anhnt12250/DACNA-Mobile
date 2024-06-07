@@ -9,7 +9,8 @@
       "@components/*": ["./src/components/*"],
       "@services/*": ["./src/services/*"],
       "@redux/*": ["./src/redux/*"],
-      "@themes/*": ["./src/themes/*"]
+      "@themes/*": ["./src/themes/*"],
+      "@utils/*": ["./src/utils/*"]
     },
     "strict": true
   },

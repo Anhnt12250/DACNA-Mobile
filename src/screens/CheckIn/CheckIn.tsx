@@ -25,7 +25,7 @@ function DialogSuccess(props: any) {
   const handleOnCheckInSuccess = () => {
     hideDialogSuccess();
     refreshState();
-    navigation.navigate("Home");
+    navigation.navigate("Home", { isRefresh: true });
   };
 
   return (
@@ -107,7 +107,7 @@ export default function CheckInScreen({ route, navigation }: any) {
   }
 
   return (
-    <View style={globalStyles.container}>
+    <View style={[globalStyles.container, { justifyContent: "center" }]}>
       {!group && <Text>Loading...</Text>}
       {group && (
         <>

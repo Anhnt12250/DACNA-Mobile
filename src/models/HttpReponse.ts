@@ -6,7 +6,7 @@ export type ServerResponse<T = any> = {
 };
 
 export const mapToServerResponse = async <T = any>(response: Response) => {
-  const data = (await response.json()) as ServerResponse<T>;
+  const data = JSON.parse(await response.text()) as ServerResponse<T>;
 
   if (data.status >= 400 && data.status < 600) {
     throw new Error(data.message);

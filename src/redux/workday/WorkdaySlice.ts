@@ -53,9 +53,11 @@ const WorkdaySlice = createSlice({
     builder.addCase(getCurrentWorkdayAsync.fulfilled, (state, action) => {
       state.loading = false;
       state.workday = action.payload.data;
+      state.error = "";
     });
     builder.addCase(getCurrentWorkdayAsync.rejected, (state) => {
       state.loading = false;
+      state.workday = null;
       state.error = "Failed to fetch current workday";
     });
   },
