@@ -4,10 +4,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import UserService from "@services/user.service";
 
 // Models
-import { User } from "@models/User.model";
+import { FullUser } from "@models/User.model";
 
 export interface UserState {
-  user: User | null;
+  user: FullUser | null;
   loading: boolean;
   error: string;
 }

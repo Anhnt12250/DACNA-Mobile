@@ -4,17 +4,15 @@ import { FAB, Portal } from "react-native-paper";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 
 // Screens
-import HomeScreen from "@screens/Home/HomeScreen";
-import MyRequestScreen from "@screens/MyRequest/MyRequestScreen";
-import SettingScreen from "@screens/Setting/SettingScreen";
+import TimerScreen from "@screens/Timer/TimerScreen";
+import GroupsScreen from "@screens/Groups/GroupsScreen";
 
 // Tab Navigator
 const Tab = createMaterialBottomTabNavigator();
 
 const BOTTOM_TABS = [
-  { name: "Home", icon: "home", component: HomeScreen },
-  { name: "My Request", icon: "clipboard-list", component: MyRequestScreen },
-  { name: "Settings", icon: "cog", component: SettingScreen },
+  { name: "Current", icon: "clock", component: TimerScreen },
+  { name: "Groups", icon: "account-group", component: GroupsScreen },
 ];
 
 export default function MainNavigation(props: any) {
@@ -23,22 +21,24 @@ export default function MainNavigation(props: any) {
   };
 
   return (
-    <Portal.Host>
-      <Tab.Navigator>
-        {BOTTOM_TABS.map((tab, index) => (
-          <Tab.Screen
-            key={index}
-            name={tab.name}
-            component={tab.component}
-            options={{ tabBarIcon: tab.icon }}
-          />
-        ))}
-      </Tab.Navigator>
-      <FAB
-        style={{ position: "absolute", margin: 16, right: 0, bottom: 90 }}
-        icon="qrcode-scan"
-        onPress={() => navigateToCheckIn()}
-      />
-    </Portal.Host>
+    <>
+      <Portal.Host>
+        <Tab.Navigator>
+          {BOTTOM_TABS.map((tab, index) => (
+            <Tab.Screen
+              key={index}
+              name={tab.name}
+              component={tab.component}
+              options={{ tabBarIcon: tab.icon }}
+            ></Tab.Screen>
+          ))}
+        </Tab.Navigator>
+        <FAB
+          style={{ position: "absolute", margin: 16, right: 0, bottom: 90 }}
+          icon="qrcode-scan"
+          onPress={() => navigateToCheckIn()}
+        />
+      </Portal.Host>
+    </>
   );
 }

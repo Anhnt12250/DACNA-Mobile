@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useColorScheme } from "react-native";
 import { Provider, useSelector, useDispatch } from "react-redux";
@@ -22,7 +23,7 @@ import { AuthActions } from "@redux/auth/AuthSlice";
 
 // Page Navigation
 import QuickResponseNavigation from "src/nagivation/QuickResponseNavigation";
-import MainNavigation from "./src/nagivation/MainNavigation";
+import DrawerNavigation from "src/nagivation/DrawerNavigation";
 import AuthenticationNavigation from "./src/nagivation/AuthenticationNavigation";
 
 // Components
@@ -39,7 +40,18 @@ function Wrapper() {
     initializeApp();
   }, []);
 
+  useEffect(() => {
+    console.log(isLoggedIn);
+  }, [isLoggedIn]);
+
   const initializeApp = async () => {
+    await dispatch(AuthActions.checkUserSessionAsync());
+    setIsInitialized(true);
+  };
+
+  const reInitializeApp = async () => {
+    console.log("Reinitializing App");
+    setIsInitialized(false);
     await dispatch(AuthActions.checkUserSessionAsync());
     setIsInitialized(true);
   };
@@ -49,7 +61,11 @@ function Wrapper() {
       {isInitialized ? (
         isLoggedIn ? (
           <>
-            <Stack.Screen name="MainNavigation" component={MainNavigation} />
+            <Stack.Screen
+              name="DrawerNavigation"
+              component={DrawerNavigation}
+              initialParams={{ reInitializeApp }}
+            />
             <Stack.Screen name="QuickResponseNavigation" component={QuickResponseNavigation} />
           </>
         ) : (
@@ -65,12 +81,11 @@ function Wrapper() {
 import themes, { changeGlobalTheme } from "@themes/themes";
 
 export default function App() {
+  const sysScheme = useColorScheme();
   const [currentTheme, setCurrentTheme] = useState<ThemeMode>("system");
 
   const [themeCustom, setThemeCustom] = useState(themes.light.Custom);
   const [themeCombined, setThemeCombined] = useState(themes.light.Combined);
-
-  const sysScheme = useColorScheme();
 
   useEffect(() => {
     if (currentTheme !== "system") {

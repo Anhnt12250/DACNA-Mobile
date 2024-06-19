@@ -1,12 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { View } from "react-native";
-import { Text, SegmentedButtons } from "react-native-paper";
+import { Text, SegmentedButtons, useTheme } from "react-native-paper";
 
 import globalStyles from "@components/styles.css";
 
 import { PreferencesContext } from "@themes/ThemeContext";
 
 export default function SettingScreen() {
+  const themeCustom = useTheme();
   const { changeTheme } = useContext(PreferencesContext);
 
   const [mode, setMode] = useState("system");
@@ -16,9 +17,11 @@ export default function SettingScreen() {
   }, [mode]);
 
   return (
-    <View style={[globalStyles.screen, { padding: 20 }]}>
+    <View
+      style={[globalStyles.screen, { padding: 20, backgroundColor: themeCustom.colors.background }]}
+    >
       <View>
-        <Text style={globalStyles.screenTitle}>Settings</Text>
+        <Text style={globalStyles.screenTitle}>Mode</Text>
       </View>
 
       <View>

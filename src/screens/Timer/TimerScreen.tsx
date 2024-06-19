@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { StyleSheet, View } from "react-native";
-import { ActivityIndicator, Button, Dialog, Portal, Text } from "react-native-paper";
+import { ActivityIndicator, Button, Dialog, Portal, Text, useTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
 import globalStyles from "@components/styles.css";
@@ -17,12 +17,17 @@ import { CheckOutActions } from "@redux/workday/CheckOutSlice";
 //utils
 import { convertStringToTimestamp } from "@utils/time";
 
-export default function HomeScreen({ route, navigation }: any) {
+//components
+import ConfirmDialog from "@components/ComfirmDialog";
+
+export default function TimerScreen({ route, navigation }: any) {
+  const themeCustom = useTheme();
   const isRefresh = route.params?.isRefresh;
 
   const [timer, setTimer] = useState<string>("");
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout>();
   const [refresh, setRefresh] = useState<boolean>(true);
+  const [comfirmDialogVisible, setComfirmDialogVisible] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -30,9 +35,9 @@ export default function HomeScreen({ route, navigation }: any) {
   const workday = useSelector((state: RootState) => state.workday.workday);
   const group = useSelector((state: RootState) => state.group.group);
 
-  const isCheckingOut = useSelector((state: RootState) => state.checkout.isCheckingOut);
-  const isCheckingSuccess = useSelector((state: RootState) => state.checkout.isCheckingSuccess);
-  const isCheckingError = useSelector((state: RootState) => state.checkout.isCheckingError);
+  const { isCheckingOut, isCheckingSuccess, isCheckingError } = useSelector(
+    (state: RootState) => state.checkout
+  );
 
   const error = useSelector((state: RootState) => state.checkout.error);
 
@@ -63,6 +68,10 @@ export default function HomeScreen({ route, navigation }: any) {
     }
   }, [workday]);
 
+  const handleOnConfirmCheckOut = () => {
+    setComfirmDialogVisible(true);
+  };
+
   const handleOnCheckOut = (id: string) => {
     dispatch(CheckOutActions.checkOutAsync(id));
   };
@@ -87,31 +96,38 @@ export default function HomeScreen({ route, navigation }: any) {
       <View>
         {workday ? (
           <>
-            <Text style={styles.header}>Currently working at group: </Text>
-            <Text style={styles.group_name}>{group?.name}</Text>
-            <View style={styles.timer_container}>
-              <Text style={styles.timer_text}>You have been working for</Text>
-              <Text style={styles.timer}> {timer}</Text>
+            <View style={styles.group_container}>
+              <Text style={styles.text}>Currently working at group: </Text>
+              <Text style={styles.group_name}>{group?.name}</Text>
             </View>
-            <Button
-              style={styles.button}
-              mode="contained"
-              onPress={() => {
-                handleOnCheckOut(workday.id);
-              }}
-            >
+            <View style={styles.timer_container}>
+              <Text style={styles.text}>You have been working for</Text>
+              <Text style={[styles.timer, { color: themeCustom.colors.primary }]}> {timer}</Text>
+            </View>
+            <Button style={styles.button} mode="contained" onPress={handleOnConfirmCheckOut}>
               {isCheckingOut ? <ActivityIndicator animating={true} /> : "Check out"}
             </Button>
           </>
         ) : (
           <>
-            <Text style={styles.header}>
+            <Text style={styles.notCheckedIn}>
               You are not currently working. Scan the QR code to start working.
             </Text>
           </>
         )}
       </View>
       <Portal>
+        <ConfirmDialog
+          visible={comfirmDialogVisible}
+          message="Are you sure you want to check out?"
+          callback={(result: boolean) => {
+            if (result) {
+              handleOnCheckOut(workday!.id);
+            }
+            setComfirmDialogVisible(false);
+          }}
+        />
+
         <DialogError refreshState={refreshState} isCheckingError={isCheckingError} error={error} />
         <DialogSuccess
           refreshState={refreshState}
@@ -191,7 +207,6 @@ function DialogError(props: any) {
 const styles = StyleSheet.create({
   header: {
     fontSize: 24,
-    marginTop: 20,
   },
   user_name: {
     fontSize: 28,
@@ -205,17 +220,27 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 30,
   },
+  group_container: {
+    flexDirection: "column",
+    marginTop: 20,
+  },
   timer_container: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
   },
-  timer_text: {
+  text: {
     fontSize: 20,
   },
   timer: {
     fontSize: 32,
     fontWeight: "bold",
+  },
+  notCheckedIn: {
+    fontSize: 18,
+    marginTop: 20,
+    opacity: 0.5,
+    textAlign: "center",
   },
 });

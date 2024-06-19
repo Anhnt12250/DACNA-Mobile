@@ -3,8 +3,6 @@ import { useForm } from "react-hook-form";
 import { Button, Text, ActivityIndicator } from "react-native-paper";
 import { useSelector } from "react-redux";
 
-import themes from "@themes/themes";
-
 //redux
 import { RootState } from "@redux/store";
 
@@ -13,6 +11,7 @@ import { LoginFormModel } from "../models/login-form.model";
 
 //components
 import EmailInput from "@components/EmailInput";
+import DefaultInput from "@components/DefaultInput";
 import PasswordInput from "@components/PasswordInput";
 
 // theme
@@ -21,7 +20,7 @@ import { currentTheme } from "@themes/themes";
 export default function Form(props: any) {
   const { control, handleSubmit } = useForm<LoginFormModel>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -36,7 +35,7 @@ export default function Form(props: any) {
 
   return (
     <>
-      <EmailInput control={control} name="email" label="Email" />
+      <DefaultInput control={control} name="username" label="Username" />
       <PasswordInput control={control} name="password" label="Password" />
       <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
         {isLogging ? <ActivityIndicator animating={true} /> : "Login"}

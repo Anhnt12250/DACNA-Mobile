@@ -5,9 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import globalStyles from "@components/styles.css";
 
+// Redux
 import { AppDispatch, RootState } from "@redux/store";
 import { GroupActions } from "@redux/group/GroupSlice";
 import { CheckInActions } from "@redux/workday/CheckInSlice";
+
+// Components
+import ConfirmDialog from "@components/ComfirmDialog";
 
 function DialogSuccess(props: any) {
   const { isCheckingSuccess, navigation, refreshState } = props;
@@ -25,7 +29,7 @@ function DialogSuccess(props: any) {
   const handleOnCheckInSuccess = () => {
     hideDialogSuccess();
     refreshState();
-    navigation.navigate("Home", { isRefresh: true });
+    navigation.navigate("Current", { isRefresh: true });
   };
 
   return (
@@ -75,19 +79,25 @@ function DialogError(props: any) {
 export default function CheckInScreen({ route, navigation }: any) {
   const { id } = route.params;
 
+  const [comfirmVisible, setComfirmVisible] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const group = useSelector((state: RootState) => state.group.group);
 
-  const isCheckingIn = useSelector((state: RootState) => state.checkin.isCheckingIn);
-  const isCheckingSuccess = useSelector((state: RootState) => state.checkin.isCheckingSuccess);
-  const isCheckingError = useSelector((state: RootState) => state.checkin.isCheckingError);
+  const { isCheckingIn, isCheckingSuccess, isCheckingError } = useSelector(
+    (state: RootState) => state.checkin
+  );
 
   const error = useSelector((state: RootState) => state.checkin.error);
 
   useEffect(() => {
     dispatch(GroupActions.getGroupAsync(id));
   }, [id]);
+
+  const handleOnComfirmCheckIn = () => {
+    setComfirmVisible(true);
+  };
 
   const handleOnCheckIn = () => {
     dispatch(CheckInActions.checkInAsync(id));
@@ -115,12 +125,22 @@ export default function CheckInScreen({ route, navigation }: any) {
           <Button
             style={styles.button}
             mode="contained"
-            onPress={handleOnCheckIn}
+            onPress={handleOnComfirmCheckIn}
             disabled={isCheckingIn}
           >
             {isCheckingIn ? <ActivityIndicator animating={true} /> : "Check in"}
           </Button>
           <Portal>
+            <ConfirmDialog
+              visible={comfirmVisible}
+              message="Are you sure you want to check in?"
+              callback={(result: boolean) => {
+                if (result) {
+                  handleOnCheckIn();
+                }
+                setComfirmVisible(false);
+              }}
+            />
             <DialogError
               refreshState={refreshState}
               isCheckingError={isCheckingError}

@@ -4,6 +4,7 @@ apply plugin: "com.facebook.react"
 
 // @generated begin react-native-camera-kit - expo prebuild (DO NOT MODIFY) sync-da5d046782ce206eb1a15efb549575ac4d8785ca
 apply plugin: "kotlin-android"
+
 // @generated end react-native-camera-kit
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
