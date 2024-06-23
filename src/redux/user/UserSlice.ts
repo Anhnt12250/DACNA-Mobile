@@ -21,7 +21,13 @@ const initialState: UserState = {
 const UserSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    refreshUser: (state) => {
+      state.loading = false;
+      state.user = null;
+      state.error = "";
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUserAsync.pending, (state) => {
       state.loading = true;
@@ -41,10 +47,12 @@ const UserSlice = createSlice({
     builder.addCase(loginUserAsync.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload.data;
+      state.error = "";
     });
-    builder.addCase(loginUserAsync.rejected, (state) => {
+    builder.addCase(loginUserAsync.rejected, (state, action) => {
       state.loading = false;
-      state.error = "Failed to login";
+      state.user = null;
+      state.error = action.error.message || "Failed to login";
     });
 
     builder.addCase(logoutUserAsync.pending, (state) => {
@@ -54,9 +62,8 @@ const UserSlice = createSlice({
       state.loading = false;
       state.user = null;
     });
-    builder.addCase(logoutUserAsync.rejected, (state) => {
+    builder.addCase(logoutUserAsync.rejected, (state, payload) => {
       state.loading = false;
-      state.error = "Failed to logout";
     });
   },
 });

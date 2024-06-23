@@ -2,11 +2,44 @@ import { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 
 import { Camera, CameraType } from "react-native-camera-kit";
+import { Button, Dialog, Portal, Text } from "react-native-paper";
+
+function DialogError(props: any) {
+  const { error, visible, refreshQR } = props;
+
+  const [visibleError, setVisibleError] = useState(false);
+  const showDialogError = () => setVisibleError(true);
+  const hideDialogError = () => setVisibleError(false);
+
+  useEffect(() => {
+    if (visible) {
+      showDialogError();
+    }
+  }, [visible]);
+
+  const handleOnCheckInError = () => {
+    hideDialogError();
+    refreshQR();
+  };
+
+  return (
+    <Dialog visible={visibleError} onDismiss={hideDialogError}>
+      <Dialog.Title>Error</Dialog.Title>
+      <Dialog.Content>
+        <Text variant="bodyMedium">{error}</Text>
+      </Dialog.Content>
+      <Dialog.Actions>
+        <Button onPress={handleOnCheckInError}>Close</Button>
+      </Dialog.Actions>
+    </Dialog>
+  );
+}
 
 export default function QRScannerScreen(props: any) {
   const { navigation } = props;
 
   const [qr, setQr] = useState<string>("");
+  const [isValidQR, setIsValidQR] = useState<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -17,13 +50,18 @@ export default function QRScannerScreen(props: any) {
   }, [navigation]);
 
   const handleOnScanned = (qr: string) => {
-    // turn off the scanner
-    setQr(qr);
     const [action, id] = qr.split(":");
-
     if (action === "checkin") {
       navigation.navigate("CheckIn", { id });
+      setQr(qr);
+    } else {
+      setIsValidQR(true);
     }
+  };
+
+  const refreshQR = () => {
+    setQr("");
+    setIsValidQR(false);
   };
 
   return (
@@ -41,6 +79,9 @@ export default function QRScannerScreen(props: any) {
           frameColor="white"
         />
       )}
+      <Portal>
+        <DialogError error="Invalid QR code" visible={isValidQR} refreshQR={refreshQR} />
+      </Portal>
     </View>
   );
 }

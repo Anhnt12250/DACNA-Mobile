@@ -1,9 +1,10 @@
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { View, StyleSheet, Image } from "react-native";
-import { Text } from "react-native-paper";
+import { Button, Dialog, Portal, Text } from "react-native-paper";
 
 //redux
-import { AppDispatch } from "@redux/store";
+import { AppDispatch, RootState } from "@redux/store";
 import { UserActions } from "@redux/user/UserSlice";
 import { AuthActions } from "@redux/auth/AuthSlice";
 
@@ -14,8 +15,43 @@ import { LoginFormModel } from "./models/login-form.model";
 import FormComponent from "@screens/Login/components/LoginFormComponent";
 import PlatformComponent from "@screens/Login/components/PlatformComponent";
 
+function DialogError(props: any) {
+  const { error, visible, afterDialogClose } = props;
+
+  const [visibleError, setVisibleError] = useState(false);
+  const showDialogError = () => setVisibleError(true);
+  const hideDialogError = () => setVisibleError(false);
+
+  useEffect(() => {
+    if (visible) {
+      showDialogError();
+    }
+  }, [visible]);
+
+  const handleOnCheckInError = () => {
+    hideDialogError();
+    afterDialogClose();
+  };
+
+  return (
+    <Dialog visible={visibleError} onDismiss={hideDialogError}>
+      <Dialog.Title>Error</Dialog.Title>
+      <Dialog.Content>
+        <Text variant="bodyMedium">{error}</Text>
+      </Dialog.Content>
+      <Dialog.Actions>
+        <Button onPress={handleOnCheckInError}>Close</Button>
+      </Dialog.Actions>
+    </Dialog>
+  );
+}
+
 export default function LoginScreen(props: any) {
   const { navigation } = props;
+
+  const error = useSelector((state: RootState) => state.user.error);
+
+  const [dialogVisible, setDialogVisible] = useState(false);
 
   // store
   const dispatch = useDispatch<AppDispatch>();
@@ -23,6 +59,19 @@ export default function LoginScreen(props: any) {
   const handleOnLogin = async (form: LoginFormModel) => {
     await dispatch(UserActions.loginUserAsync(form));
     await dispatch(AuthActions.checkUserSessionAsync());
+  };
+
+  useEffect(() => {
+    if (error) {
+      setDialogVisible(true);
+      console.log("error", error);
+    }
+  }, [error]);
+
+  const afterDialogClose = async () => {
+    console.log("afterDialogClose");
+    setDialogVisible(false);
+    dispatch(UserActions.refreshUser());
   };
 
   const handleChangeToRegister = () => {
@@ -55,6 +104,9 @@ export default function LoginScreen(props: any) {
         onFacebookLogin={handleOnFacebookLogin}
         onGithubLogin={handleOnGithubLogin}
       />
+      <Portal>
+        <DialogError error={error} visible={dialogVisible} afterDialogClose={afterDialogClose} />
+      </Portal>
     </View>
   );
 }
